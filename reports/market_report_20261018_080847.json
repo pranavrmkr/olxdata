@@ -1,0 +1,23 @@
+{
+  "generated_at": "2026-10-18T08:08:47.262643",
+  "period_days": 30,
+  "market_overview": {
+    "total_listings": 0,
+    "total_enriched": 0,
+    "total_phone_specs": 0,
+    "cities_covered": [],
+    "brands_covered": [],
+    "date_range": {},
+    "avg_price": 0,
+    "median_price": 0,
+    "price_range": {
+      "min": 0,
+      "max": 0
+    }
+  },
+  "brand_analysis": [],
+  "city_analysis": [],
+  "price_segments": {},
+  "top_deals": [],
+  "anomalies": []
+}

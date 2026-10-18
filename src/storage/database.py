@@ -677,11 +677,19 @@ class Database:
             rows = await cursor.fetchall()
             return [self._row_to_enriched_listing(row) for row in rows]
 
-    async def get_fraud_analyses(self, limit: int = 1000) -> List[FraudAnalysis]:
+    async def get_fraud_analyses(self, limit: int = 1000, days_back: Optional[int] = None) -> List[FraudAnalysis]:
         """Get fraud analyses."""
-        async with self._pool.execute(
-            "SELECT * FROM fraud_analysis ORDER BY analyzed_at DESC LIMIT ?", (limit,)
-        ) as cursor:
+        query = "SELECT * FROM fraud_analysis"
+        params = []
+        if days_back:
+            from datetime import datetime, timedelta
+            cutoff = (datetime.utcnow() - timedelta(days=days_back)).isoformat()
+            query += " WHERE analyzed_at >= ?"
+            params.append(cutoff)
+        query += " ORDER BY analyzed_at DESC LIMIT ?"
+        params.append(limit)
+
+        async with self._pool.execute(query, params) as cursor:
             rows = await cursor.fetchall()
             results = []
             for row in rows:
