@@ -1,0 +1,117 @@
+# OLX Scraper Configuration
+# All settings centralized here for easy modification
+
+scraper:
+  # Maximum listings to collect per exact phone model+configuration
+  max_listings_per_model: 3
+
+  # Maximum pages to scrape per city (each page has ~40 listings)
+  max_pages_per_city: 10
+
+  # Delay between requests (seconds) - randomized between min and max
+  delay_min: 3
+  delay_max: 8
+
+  # Page load timeout (seconds)
+  timeout: 30
+
+  # Run browser in headless mode
+  headless: true
+
+  # User agent rotation
+  rotate_user_agents: true
+
+  # Respect robots.txt
+  respect_robots: true
+
+# Target cities for scraping
+cities:
+  - name: "delhi"
+    olx_city_code: "delhi"
+    display_name: "Delhi"
+  - name: "mumbai"
+    olx_city_code: "mumbai"
+    display_name: "Mumbai"
+  - name: "chennai"
+    olx_city_code: "chennai"
+    display_name: "Chennai"
+  - name: "bengaluru"
+    olx_city_code: "bangalore"
+    display_name: "Bengaluru"
+  - name: "kolkata"
+    olx_city_code: "kolkata"
+    display_name: "Kolkata"
+  - name: "hyderabad"
+    olx_city_code: "hyderabad"
+    display_name: "Hyderabad"
+
+# Phone specification enrichment
+enrichment:
+  # Cache phone specs for this many days
+  spec_cache_days: 30
+
+  # Minimum confidence threshold for spec matching (0-1)
+  confidence_threshold: 0.7
+
+  # Sources to try in order
+  sources:
+    - "gsmarena"
+    - "manufacturer"
+
+  # Request timeout for enrichment sources
+  request_timeout: 15
+
+  # Max retries for failed enrichment requests
+  max_retries: 3
+
+# Fraud/suspicious listing detection
+fraud_detection:
+  # Z-score threshold for price anomaly detection
+  price_zscore_threshold: 2.5
+
+  # Minimum listings per model for statistical analysis
+  min_listings_for_stats: 5
+
+  # Enable scam pattern detection in text
+  enable_scam_patterns: true
+
+  # Risk level thresholds
+  risk_thresholds:
+    low: 0.3
+    medium: 0.6
+    high: 0.8
+
+# Output configuration
+output:
+  # Export formats: csv, json, jsonl
+  export_formats:
+    - "csv"
+    - "json"
+
+  # Reports directory
+  reports_dir: "data/reports"
+
+  # Export raw listings
+  export_raw: true
+
+  # Export enriched listings
+  export_enriched: true
+
+  # Export flagged listings
+  export_flagged: true
+
+# Database configuration
+database:
+  # SQLite database path
+  path: "data/olx_data.db"
+
+  # Enable WAL mode for better concurrency
+  wal_mode: true
+
+# Logging configuration
+logging:
+  level: "INFO"
+  format: "json"
+  file: "data/scraper.log"
+  max_bytes: 10485760  # 10MB
+  backup_count: 5

@@ -1,0 +1,131 @@
+# City configuration for OLX scraping
+# Each city defines OLX-specific codes and display names
+
+cities:
+  - name: "delhi"
+    olx_city_code: "delhi"
+    display_name: "Delhi"
+    search_terms:
+      - "mobile-phones"
+      - "smartphones"
+      - "iphone"
+      - "android"
+    pin_codes:
+      - "110001"
+      - "110002"
+      - "110003"
+      - "110004"
+      - "110005"
+      - "110006"
+
+  - name: "mumbai"
+    olx_city_code: "mumbai"
+    display_name: "Mumbai"
+    search_terms:
+      - "mobile-phones"
+      - "smartphones"
+      - "iphone"
+      - "android"
+    pin_codes:
+      - "400001"
+      - "400002"
+      - "400003"
+      - "400004"
+      - "400005"
+      - "400006"
+
+  - name: "chennai"
+    olx_city_code: "chennai"
+    display_name: "Chennai"
+    search_terms:
+      - "mobile-phones"
+      - "smartphones"
+      - "iphone"
+      - "android"
+    pin_codes:
+      - "600001"
+      - "600002"
+      - "600003"
+      - "600004"
+      - "600005"
+      - "600006"
+
+  - name: "bengaluru"
+    olx_city_code: "bangalore"
+    display_name: "Bengaluru"
+    search_terms:
+      - "mobile-phones"
+      - "smartphones"
+      - "iphone"
+      - "android"
+    pin_codes:
+      - "560001"
+      - "560002"
+      - "560003"
+      - "560004"
+      - "560005"
+      - "560006"
+
+  - name: "kolkata"
+    olx_city_code: "kolkata"
+    display_name: "Kolkata"
+    search_terms:
+      - "mobile-phones"
+      - "smartphones"
+      - "iphone"
+      - "android"
+    pin_codes:
+      - "700001"
+      - "700002"
+      - "700003"
+      - "700004"
+      - "700005"
+      - "700006"
+
+  - name: "hyderabad"
+    olx_city_code: "hyderabad"
+    display_name: "Hyderabad"
+    search_terms:
+      - "mobile-phones"
+      - "smartphones"
+      - "iphone"
+      - "android"
+    pin_codes:
+      - "500001"
+      - "500002"
+      - "500003"
+      - "500004"
+      - "500005"
+      - "500006"
+
+  - name: "pune"
+    olx_city_code: "pune"
+    display_name: "Pune"
+    search_terms:
+      - "mobile-phones"
+      - "smartphones"
+      - "iphone"
+      - "android"
+    pin_codes:
+      - "411001"
+      - "411002"
+      - "411003"
+      - "411004"
+      - "411005"
+      - "411006"
+
+  - name: "ahmedabad"
+    olx_city_code: "ahmedabad"
+    display_name: "Ahmedabad"
+    search_terms:
+      - "mobile-phones"
+      - "smartphones"
+      - "iphone"
+      - "android"
+    pin_codes:
+      - "380001"
+      - "380002"
+      - "380003"
+      - "380004"
+      - "380005"
+      - "380006"

@@ -1,0 +1,129 @@
+Metadata-Version: 2.4
+Name: olx-phone-data
+Version: 1.0.0
+Summary: OLX Phone Data Pipeline - Scrape, enrich, and analyze phone listings from OLX
+Author: OLX Data Team
+License: MIT
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: asyncpg>=0.29.0
+Requires-Dist: sqlalchemy>=2.0.30
+Requires-Dist: alembic>=1.13.1
+Requires-Dist: playwright>=1.44.0
+Requires-Dist: httpx>=0.27.0
+Requires-Dist: beautifulsoup4>=4.12.3
+Requires-Dist: lxml>=5.2.2
+Requires-Dist: pydantic>=2.8.2
+Requires-Dist: pydantic-settings>=2.3.4
+Requires-Dist: python-dotenv>=1.0.1
+Requires-Dist: structlog>=24.1.0
+Requires-Dist: tenacity>=8.3.0
+Requires-Dist: python-dateutil>=2.9.0.post0
+Requires-Dist: click>=8.1.7
+Requires-Dist: rich>=13.7.1
+Provides-Extra: dev
+Requires-Dist: pytest>=8.2.2; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.23.5; extra == "dev"
+Requires-Dist: pytest-cov>=5.0.0; extra == "dev"
+Requires-Dist: black>=24.4.2; extra == "dev"
+Requires-Dist: ruff>=0.4.4; extra == "dev"
+Requires-Dist: mypy>=1.10.0; extra == "dev"
+Requires-Dist: pre-commit>=3.7.1; extra == "dev"
+
+﻿# OLX Phone Data Pipeline
+
+A comprehensive tool for scraping, enriching, and analyzing phone listings from OLX India.
+
+## Features
+
+- **Scraping**: Automated collection of phone listings from OLX across major Indian cities
+- **Enrichment**: Match listings to phone specifications (GSMArena) and calculate metrics
+- **Fraud Detection**: Rule-based detection of suspicious listings
+- **Pricing Analysis**: Fair market value calculations and price trends
+- **Analytics**: Market reports, deal finding, and anomaly detection
+
+## Quick Start
+
+```bash
+# Install dependencies
+pip install -e ".[dev]"
+
+# Install Playwright browsers
+playwright install chromium
+
+# Set up environment
+cp .env.example .env
+# Edit .env with your database URL
+
+# Run database migrations
+alembic upgrade head
+
+# Scrape listings
+olx-data scrape --cities mumbai delhi --max-pages 5
+
+# Enrich with phone specs
+olx-data enrich --limit 1000
+
+# Detect fraud
+olx-data fraud --limit 1000
+
+# Calculate fair prices
+olx-data price
+
+# Generate report
+olx-data report --output reports --days 30
+
+# Find deals
+olx-data deals --city mumbai --days 7
+```
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `scrape` | Scrape listings from OLX |
+| `enrich` | Match listings to phone specifications |
+| `fraud` | Run fraud detection |
+| `price` | Calculate fair market prices |
+| `report` | Generate analytics report |
+| `deals` | Find potentially good deals |
+| `anomalies` | Detect anomalous listings |
+| `stats` | Show database statistics |
+| `export` | Export data to CSV/JSON |
+
+## Configuration
+
+Create a `.env` file:
+
+```env
+DATABASE_URL=postgresql+asyncpg://user:pass@localhost/olx_data
+LOG_LEVEL=INFO
+HEADLESS=true
+```
+
+## Project Structure
+
+```
+src/
+├── cli.py              # Main CLI entry point
+├── storage/            # Database models and operations
+├── scraper/            # OLX scraping logic
+├── enrichment/         # Phone spec matching
+├── fraud/              # Fraud detection
+├── pricing/            # Price analysis
+├── analytics/          # Reports and insights
+└── utils/              # Logging and helpers
+```
+
+## Database Schema
+
+- **raw_listings**: Raw scraped data from OLX
+- **phone_specs**: Phone specifications from GSMArena
+- **enriched_listings**: Listings matched to specs with metrics
+- **fraud_analyses**: Fraud detection results
+- **price_stats**: Calculated price statistics
+- **collection_runs**: Scraping run metadata
+
+## License
+
+MIT
