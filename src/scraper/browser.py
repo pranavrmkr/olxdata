@@ -76,6 +76,9 @@ class StealthBrowser:
                 "--disable-background-timer-throttling",
                 "--disable-renderer-backgrounding",
                 "--disable-ipc-flooding-protection",
+                "--disable-http2",  # Fix HTTP2 protocol errors
+                "--disable-quic",  # Disable QUIC
+                "--enable-features=NetworkService,NetworkServiceInProcess",
             ]
         )
 
@@ -117,20 +120,6 @@ class StealthBrowser:
         # Apply stealth using Stealth class
         stealth = Stealth()
         await stealth.apply_stealth_async(self._context)
-
-        # Add scripts to hide automation
-        await self._context.add_init_script("""
-            Object.defineProperty(navigator, 'webdriver', {
-                get: () => undefined
-            });
-            window.chrome = { runtime: {} };
-            Object.defineProperty(navigator, 'plugins', {
-                get: () => [1, 2, 3, 4, 5]
-            });
-            Object.defineProperty(navigator, 'languages', {
-                get: () => ['en-IN', 'en', 'hi']
-            });
-        """)
 
         logger.info("Stealth browser started successfully")
 
@@ -221,21 +210,42 @@ class RateLimitedBrowser(StealthBrowser):
         self._last_request_time: float = 0
 
     async def navigate_with_delay(self, page: Page, url: str, **kwargs) -> None:
-        """Navigate to URL with random delay."""
+        """Navigate to URL with random delay and retry on HTTP2 errors."""
         import time
 
-        # Apply delay since last request
-        elapsed = time.time() - self._last_request_time
-        if elapsed > 0:
-            min_wait = self.min_delay - elapsed
-            if min_wait > 0:
-                await sleep_random(min_wait, self.max_delay)
+        max_retries = 3
+        for attempt in range(max_retries):
+            # Apply delay since last request
+            elapsed = time.time() - self._last_request_time
+            if elapsed > 0:
+                min_wait = self.min_delay - elapsed
+                if min_wait > 0:
+                    await sleep_random(min_wait, self.max_delay)
 
-        # Navigate
-        response = await page.goto(url, wait_until="domcontentloaded", **kwargs)
-        self._last_request_time = time.time()
+            try:
+                # Navigate with longer timeout and networkidle wait
+                response = await page.goto(
+                    url,
+                    wait_until="domcontentloaded",
+                    timeout=90000,
+                    **kwargs
+                )
+                self._last_request_time = time.time()
 
-        # Wait for page to settle
-        await sleep_random(1.0, 3.0)
+                # Wait for page to settle
+                await sleep_random(2.0, 5.0)
 
-        return response
+                # Check if we got a valid response
+                if response and response.status >= 400:
+                    raise Exception(f"HTTP {response.status}")
+
+                return response
+
+            except Exception as e:
+                error_msg = str(e)
+                if "ERR_HTTP2_PROTOCOL_ERROR" in error_msg or "ERR_CONNECTION" in error_msg:
+                    if attempt < max_retries - 1:
+                        logger.warning(f"Navigation error (attempt {attempt+1}/{max_retries}), retrying: {error_msg}")
+                        await sleep_random(5.0, 10.0)
+                        continue
+                raise
